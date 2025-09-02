@@ -47,18 +47,23 @@ def get_keyword_ideas(seed_keywords):
     payload = [{
         "keywords": seed_keywords,
         "location_name": LOCATION,
-        "language_name": LANGUAGE
+        "language_code": LANGUAGE
     }]
     res = dfseo_post("keywords_data/google_ads/keywords_for_keywords/live", payload)
     
     keyword_list = []
-    for kw_data in res["tasks"][0]["result"]:
-        for kw in kw_data["items"]:
-            keyword_list.append({
-                "keyword": kw["keyword"],
-                "search_volume": kw.get("search_volume", 0),
-                "competition": kw.get("competition", 0.0)
-            })
+    for kw in res["tasks"][0]["result"]:
+        # Handle competition field - convert string to numeric if needed
+        competition = kw.get("competition", 0.0)
+        if isinstance(competition, str):
+            competition_map = {"LOW": 0.1, "MEDIUM": 0.5, "HIGH": 0.9}
+            competition = competition_map.get(competition.upper(), 0.0)
+        
+        keyword_list.append({
+            "keyword": kw["keyword"],
+            "search_volume": kw.get("search_volume", 0),
+            "competition": competition
+        })
     return pd.DataFrame(keyword_list)
 
 # -------------------------------
@@ -70,7 +75,7 @@ def get_serp_results(keywords):
         payload = [{
             "keyword": kw,
             "location_name": LOCATION,
-            "language_name": LANGUAGE,
+            "language_code": LANGUAGE,
             "se_domain": "google.com",
             "search_engine": "google"
         }]

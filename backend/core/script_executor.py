@@ -14,8 +14,12 @@ class ScriptExecutor:
     """
     
     def __init__(self, scripts_dir: str = "scripts"):
-        self.scripts_dir = Path(scripts_dir)
+        # Ensure scripts_dir is resolved relative to the project root
         self.base_dir = Path(__file__).parent.parent.parent
+        if not Path(scripts_dir).is_absolute():
+            self.scripts_dir = self.base_dir / scripts_dir
+        else:
+            self.scripts_dir = Path(scripts_dir)
         
     def execute_keyword_research(self, project: ContentProject, 
                                 progress_callback: Optional[Callable] = None) -> bool:
@@ -24,8 +28,13 @@ class ScriptExecutor:
             if progress_callback:
                 progress_callback(10, "Setting up keyword research...")
             
-            # Get project configuration
-            project_dir = Path(project.project_path)
+            # Get project configuration - ensure absolute path
+            if Path(project.project_path).is_absolute():
+                project_dir = Path(project.project_path)
+            else:
+                # Make relative path absolute from the base directory
+                project_dir = self.base_dir / project.project_path
+            
             output_dir = project_dir / "stage_01_keyword_research"
             output_dir.mkdir(exist_ok=True)
             
@@ -153,11 +162,13 @@ def report_progress(step, total, message):
             'def cluster_keywords(keyword_df, serp_df):\n    report_progress(3, 5, "Clustering keywords...")'
         )
         
-        # Add progress at the end
+        # Add progress at the end - handle both print statements
         script_content = script_content.replace(
-            'print(f"Keyword-level clusters saved to {OUTPUT_FILE}")',
+            '''print(f"Keyword-level clusters saved to {OUTPUT_FILE}")
+    print(f"Cluster-level summary saved to {SUMMARY_FILE}")''',
             '''report_progress(5, 5, "Saving results...")
-print(f"Keyword-level clusters saved to {OUTPUT_FILE}")'''
+    print(f"Keyword-level clusters saved to {OUTPUT_FILE}")
+    print(f"Cluster-level summary saved to {SUMMARY_FILE}")'''
         )
         
         return script_content

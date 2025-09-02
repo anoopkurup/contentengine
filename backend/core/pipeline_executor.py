@@ -15,8 +15,15 @@ class PipelineExecutor:
     """
     
     def __init__(self, scripts_dir: str = "scripts"):
-        self.scripts_dir = Path(scripts_dir)
-        self.script_executor = ScriptExecutor(scripts_dir)
+        # Ensure scripts_dir is resolved relative to the project root
+        if not Path(scripts_dir).is_absolute():
+            # Get the project root directory (three levels up from this file)
+            project_root = Path(__file__).parent.parent.parent
+            self.scripts_dir = project_root / scripts_dir
+        else:
+            self.scripts_dir = Path(scripts_dir)
+        
+        self.script_executor = ScriptExecutor(str(self.scripts_dir))
         
         # Available stages and their corresponding scripts
         self.stage_scripts = {
