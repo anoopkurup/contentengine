@@ -11,7 +11,14 @@ class ProjectManager:
     """
     
     def __init__(self, projects_base_dir: str = "projects"):
-        self.projects_base_dir = Path(projects_base_dir)
+        # Ensure projects_base_dir is resolved relative to the project root
+        if not Path(projects_base_dir).is_absolute():
+            # Get the project root directory (three levels up from this file)
+            project_root = Path(__file__).parent.parent.parent
+            self.projects_base_dir = project_root / projects_base_dir
+        else:
+            self.projects_base_dir = Path(projects_base_dir)
+        
         self.projects_base_dir.mkdir(exist_ok=True)
         
         # Cache for loaded projects
