@@ -31,19 +31,31 @@ cp .env.example .env
 
 ## 🏗️ Architecture
 
-ContentEngine follows a sequential pipeline architecture:
+ContentEngine offers two powerful implementation options:
 
 ```
 📊 Keyword Research → 📝 Content Briefs → ✍️ Article Writing → 📱 Social Media → 🎬 YouTube Scripts
 ```
 
-### Pipeline Components
+### 🤖 Claude Code Integration (Recommended)
+
+**Superior content quality with strategic thinking**
 
 1. **🔍 KeywordResearcher.py** - DataForSEO-powered keyword clustering and SERP analysis
-2. **📋 ArticleBrief.py** - Structured content outlines with internal linking strategies
+2. **📋 ArticleBrief_Claude.py** - Enhanced competitive analysis with content gap identification
+3. **✍️ ArticleWriter_Claude.py** - Strategic article creation with Claude Code prompts
+4. **📱 SocialMedia_Claude.py** - Multi-platform optimization with platform-specific best practices
+5. **🎬 YouTubeScript_Claude.py** - Professional video content with engagement optimization
+
+### 🔧 OpenAI Implementation (Legacy)
+
+**Automated content generation for high-volume needs**
+
+1. **🔍 KeywordResearcher.py** - DataForSEO-powered keyword clustering and SERP analysis
+2. **📋 ArticleBrief.py** - Basic content outlines with internal linking strategies
 3. **✍️ ArticleWriter.py** - OpenAI GPT-powered article generation
-4. **📱 SocialMedia.py** - Multi-platform content repurposing (LinkedIn, Twitter, newsletters)
-5. **🎬 YoutTubeScript.py** - Video script and metadata generation
+4. **📱 SocialMedia.py** - Standard multi-platform content repurposing
+5. **🎬 YoutTubeScript.py** - Basic video script and metadata generation
 
 ## 🛠️ Features
 
@@ -104,7 +116,38 @@ ContentEngine is optimized for:
 
 ## 📊 Usage
 
-### Running the Complete Pipeline
+### 🤖 Claude Code Pipeline (Recommended)
+
+```bash
+# Activate environment
+source ContentEngine-env/bin/activate
+
+# Step 1: Keyword research (unchanged)
+python KeywordResearcher.py    # → keyword_clusters.csv, cluster_summary.csv
+
+# Step 2: Enhanced content briefs
+python ArticleBrief_Claude.py  # → article_briefs_claude.json, competitive analysis
+
+# Step 3: Generate Claude prompts for article writing
+python ArticleWriter_Claude.py # → claude_writing_prompt.md
+
+# Step 4: Use Claude Code to write article (copy prompts from generated files)
+# Copy claude_writing_prompt.md content into Claude Code
+# Save Claude's article output, then process it
+
+# Step 5: Generate social media prompts  
+python SocialMedia_Claude.py   # → claude_social_prompts_[keyword].md
+
+# Step 6: Use Claude Code for social content (copy prompts from generated files)
+# Generate LinkedIn posts, Twitter threads, newsletters, Instagram content
+
+# Step 7: Generate YouTube prompts
+python YouTubeScript_Claude.py # → claude_youtube_prompts_[keyword].md
+
+# Step 8: Use Claude Code for video scripts (copy prompts from generated files)
+```
+
+### 🔧 OpenAI Pipeline (Legacy)
 
 ```bash
 # Activate environment
@@ -137,21 +180,70 @@ Each script generates both structured JSON data and human-readable Markdown:
 
 Install via: `pip install -r requirements.txt`
 
+## 🎯 Choosing Your Implementation
+
+### 🤖 Choose Claude Code Integration When:
+- **Quality is priority**: Need superior, strategic content with deeper insights
+- **Brand consistency matters**: Require precise brand voice and messaging alignment
+- **Competitive advantage**: Want content that stands out with unique positioning
+- **Interactive refinement**: Need ability to iterate and perfect content through conversation
+- **Professional publishing**: Creating flagship content for thought leadership
+
+### 🔧 Choose OpenAI Implementation When:
+- **Volume is priority**: Need to generate large amounts of content quickly
+- **Automation is key**: Want fully automated pipeline without manual intervention
+- **Budget constraints**: API costs need to be predictable and controlled
+- **Simple content needs**: Standard content formats without advanced strategy
+- **Legacy system integration**: Working with existing OpenAI-based workflows
+
+### 📊 Implementation Comparison
+
+| Feature | Claude Code | OpenAI Legacy |
+|---------|-------------|---------------|
+| **Content Quality** | Superior, strategic | Good, professional |
+| **Setup Complexity** | Moderate (interactive) | Simple (automated) |
+| **Time Investment** | Higher initially | Lower overall |
+| **Cost Model** | Fixed subscription | Per-API-call |
+| **Customization** | Highly flexible | Template-based |
+| **Brand Alignment** | Excellent | Good |
+| **Scalability** | Quality-focused | Volume-focused |
+
+### 🔄 Hybrid Approach
+You can also use both implementations strategically:
+- **Claude Code** for premium content (pillar articles, key social posts)
+- **OpenAI Scripts** for supporting content (cluster posts, routine updates)
+- **Mix and match** based on content importance and time availability
+
 ## 📁 Project Structure
 
 ```
 ContentEngine/
-├── KeywordResearcher.py    # Keyword clustering pipeline
-├── ArticleBrief.py         # Content outline generation
-├── ArticleWriter.py        # AI article writing
-├── SocialMedia.py          # Multi-platform repurposing
-├── YoutTubeScript.py       # Video content creation
-├── Writing Instructions.md # Brand voice guidelines
-├── CLAUDE.md              # Development documentation
-├── setup.sh               # Automated setup script
-├── requirements.txt       # Python dependencies
-├── .env.example          # Environment template
-└── .gitignore           # Security exclusions
+├── Keyword Research/
+│   └── KeywordResearcher.py    # DataForSEO-powered clustering
+│
+├── Claude Code Integration/ (Recommended)
+│   ├── ArticleBrief_Claude.py   # Enhanced competitive analysis
+│   ├── ArticleWriter_Claude.py  # Strategic content creation
+│   ├── SocialMedia_Claude.py   # Multi-platform optimization
+│   └── YouTubeScript_Claude.py # Professional video content
+│
+├── OpenAI Implementation/ (Legacy)
+│   ├── ArticleBrief.py         # Basic content outlines
+│   ├── ArticleWriter.py        # Standard article generation
+│   ├── SocialMedia.py          # Basic social repurposing
+│   └── YoutTubeScript.py       # Simple video scripts
+│
+├── Configuration/
+│   ├── Writing Instructions.md # Brand voice guidelines
+│   ├── .env.example           # Environment template
+│   ├── setup.sh              # Automated setup script
+│   └── requirements.txt      # Python dependencies
+│
+└── Documentation/
+    ├── README.md             # Project overview (this file)
+    ├── CLAUDE.md            # Development guidelines
+    ├── CLAUDE_INTEGRATION.md # Claude Code usage guide
+    └── .gitignore          # Security exclusions
 ```
 
 ## 🔒 Security
@@ -174,10 +266,17 @@ ContentEngine/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 📚 Documentation
+
+- **[Claude Integration Guide](CLAUDE_INTEGRATION.md)**: Comprehensive guide for using Claude Code with ContentEngine
+- **[Development Guidelines](CLAUDE.md)**: Technical documentation for contributors
+- **[Writing Instructions](Writing%20Instructions.md)**: Brand voice and content guidelines
+
 ## 🔗 Links
 
 - **Repository**: https://github.com/anoopkurup/contentengine
 - **Issues**: https://github.com/anoopkurup/contentengine/issues
+- **Claude Code**: https://claude.ai/code
 - **DataForSEO API**: https://dataforseo.com/
 - **OpenAI API**: https://platform.openai.com/
 

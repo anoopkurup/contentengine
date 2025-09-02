@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ContentEngine is a Python-based content creation pipeline for marketing agencies and consultants. The system creates SEO-optimized blog articles and repurposes them across multiple platforms including social media, YouTube, and newsletters.
 
+**NEW**: The project now includes a modern web-based frontend interface built with Streamlit, providing an intuitive way to create projects, manage content generation, and view results through a browser-based dashboard.
+
 ## Architecture & Workflow
 
 The content creation follows a sequential pipeline:
@@ -18,19 +20,19 @@ The content creation follows a sequential pipeline:
 
 ## Quick Setup
 
-### Automated Setup
-Run the setup script to configure everything automatically:
+### Frontend Interface (Recommended)
+Launch the modern web interface for the best user experience:
 ```bash
-./setup.sh
+python run_contentengine.py
 ```
 
-This will:
-- Create a Python virtual environment
-- Install all dependencies
-- Copy `.env.example` to `.env`
-- Provide next steps
+This startup script will:
+- Check Python version compatibility
+- Install required dependencies
+- Validate environment configuration  
+- Launch the Streamlit web interface at http://localhost:8501
 
-### Manual Setup
+### Manual Setup (Advanced Users)
 
 1. **Create virtual environment**:
    ```bash
@@ -43,6 +45,12 @@ This will:
    ```bash
    cp .env.example .env
    # Edit .env with your API credentials
+   ```
+
+3. **Launch frontend**:
+   ```bash
+   cd frontend
+   streamlit run app.py
    ```
 
 ### Required API Credentials
@@ -94,14 +102,52 @@ python SocialMedia.py
 python YoutTubeScript.py
 ```
 
+## Project Structure
+
+The ContentEngine now uses a modern architecture with separate frontend and backend:
+
+```
+ContentEngine/
+├── frontend/                 # Streamlit web interface
+│   ├── app.py               # Main dashboard application
+│   └── pages/               # Additional interface pages
+│       ├── project_wizard.py    # Project creation wizard
+│       ├── pipeline_runner.py   # Pipeline execution interface  
+│       ├── content_manager.py   # Content viewing/editing
+│       └── project_settings.py  # Configuration management
+├── backend/                 # Core functionality
+│   ├── core/               # Main business logic
+│   │   ├── project_manager.py   # Project lifecycle management
+│   │   └── pipeline_executor.py # Content generation pipeline
+│   ├── models/             # Data models
+│   │   └── project.py          # Project configuration model
+│   ├── utils/              # Utility functions
+│   │   ├── progress_tracker.py # Real-time progress tracking
+│   │   └── file_utils.py       # File management utilities
+│   ├── config/             # Configuration management
+│   │   └── app_config.py       # Application settings
+│   └── scripts/            # Legacy Python scripts
+├── projects/               # Generated project content
+│   └── {project_id}/       # Individual project folders
+│       ├── config.json         # Project configuration
+│       ├── keyword_research.csv   # Keyword research results
+│       ├── article_brief.md       # Content brief
+│       ├── article.md             # Generated article  
+│       ├── social_media_posts.md  # Social media content
+│       └── youtube_script.md      # YouTube script
+├── run_contentengine.py    # Startup script
+└── requirements.txt        # Python dependencies
+```
+
 ## Output Files
 
-Each script generates both JSON and Markdown outputs:
-- `keyword_clusters.csv` / `cluster_summary.csv` - Keyword research results
-- `article_briefs.json` / `article_briefs.md` - Content outlines and internal links
-- `article_draft.json` / `article_draft.md` - Complete blog articles
-- `social_posts.json` / `social_posts.md` - Multi-platform social content
-- `youtube_script.json` / `youtube_script.md` - Video scripts and metadata
+Projects are now organized in individual folders under `projects/`. Each project contains:
+- `config.json` - Project settings and metadata  
+- `keyword_research.csv` - Keyword research results
+- `article_brief.md` - Content outlines and internal links
+- `article.md` - Complete blog articles
+- `social_media_posts.md` - Multi-platform social content
+- `youtube_script.md` - Video scripts and metadata
 
 ## Dependencies
 
