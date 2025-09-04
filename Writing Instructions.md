@@ -3,7 +3,7 @@
 ## Website Overview & Brand Voice
 
 **Website Focus**: Marketing strategy consulting for professional services and tech-enabled businesses , based in India 
-**Primary Audience**: Business owners, founders, consultants, marketing managers at service businesses  
+**Primary Audience**: Business owners, founders, consultants, marketing managers at service businesses, in India  
 **Brand Voice**: Professional yet approachable, data-driven, practical, no-fluff, systems-focused  
 **Key Messaging**: Clarity, Strategy, Systems - practical marketing that delivers measurable results
 

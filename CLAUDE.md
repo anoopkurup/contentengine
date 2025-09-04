@@ -4,172 +4,152 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ContentEngine is a Python-based content creation pipeline for marketing agencies and consultants. The system creates SEO-optimized blog articles and repurposes them across multiple platforms including social media, YouTube, and newsletters.
+ContentEngine is a unified Next.js TypeScript application for AI-powered content creation. The system manages companies, projects, and keyword research through a modern web interface with integrated database operations.
 
-**NEW**: The project now includes a modern web-based frontend interface built with Streamlit, providing an intuitive way to create projects, manage content generation, and view results through a browser-based dashboard.
+## Architecture
 
-## Architecture & Workflow
+### Technology Stack
+- **Frontend**: Next.js 15 with App Router, TypeScript, React 19
+- **Backend**: Next.js API Routes
+- **Database**: SQLite with Prisma ORM
+- **Styling**: Custom CSS (no Tailwind classes in components)
+- **APIs**: DataForSEO integration for keyword research
 
-The content creation follows a sequential pipeline:
+### Core Data Flow
+1. **Companies** → **Projects** → **Research Sessions** → **Keyword Clusters** → **Keywords**
+2. Each company has brand settings (voice, style, guidelines) and search settings
+3. Projects belong to companies and have broad keywords for research
+4. Research sessions generate keyword clusters with SERP analysis
+5. All data persists in SQLite with Prisma ORM relationships
 
-1. **Keyword Research** (`KeywordResearcher.py`) - Uses DataForSEO API to find keyword clusters
-2. **Content Brief Generation** (`ArticleBrief.py`) - Creates structured article outlines and internal linking strategies  
-3. **Article Writing** (`ArticleWriter.py`) - Generates full blog articles using OpenAI GPT
-4. **Social Media Repurposing** (`SocialMedia.py`) - Creates LinkedIn posts, tweets, newsletters, and carousel content
-5. **YouTube Content** (`YoutTubeScript.py`) - Generates video scripts and metadata
+### Directory Structure
+```
+web/
+├── src/app/                    # Next.js App Router
+│   ├── api/                   # API Routes (backend)
+│   │   ├── companies/         # Company CRUD
+│   │   ├── projects/          # Project CRUD  
+│   │   ├── keyword-research/  # Research engine
+│   │   └── dashboard/         # Aggregated data
+│   ├── companies/page.tsx     # Company management UI
+│   ├── projects/page.tsx      # Project management UI
+│   ├── research/page.tsx      # Keyword research UI
+│   └── page.tsx              # Dashboard
+├── src/lib/
+│   ├── api.ts                # Frontend API client
+│   ├── types.ts              # TypeScript interfaces
+│   ├── db.ts                 # Prisma client
+│   └── services/             # Backend business logic
+│       ├── database.ts       # Database operations
+│       └── keywordResearcher.ts # Research engine
+└── prisma/schema.prisma      # Database schema
+```
 
-## Quick Setup
+## Common Commands
 
-### Frontend Interface (Recommended)
-Launch the modern web interface for the best user experience:
+### Development
 ```bash
-python run_contentengine.py
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Run linting
+npm run lint
 ```
 
-This startup script will:
-- Check Python version compatibility
-- Install required dependencies
-- Validate environment configuration  
-- Launch the Streamlit web interface at http://localhost:8501
-
-### Manual Setup (Advanced Users)
-
-1. **Create virtual environment**:
-   ```bash
-   python3 -m venv ContentEngine-env
-   source ContentEngine-env/bin/activate
-   pip install -r requirements.txt
-   ```
-
-2. **Configure environment variables**:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API credentials
-   ```
-
-3. **Launch frontend**:
-   ```bash
-   cd frontend
-   streamlit run app.py
-   ```
-
-### Required API Credentials
-
-**DataForSEO API** (for keyword research):
-- Sign up at https://dataforseo.com/
-- Set `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD` in `.env`
-
-**OpenAI API** (for content generation):
-- Get API key from https://platform.openai.com/account/api-keys
-- Set `OPENAI_API_KEY` in `.env`
-
-### Optional Configuration
-- `TARGET_LOCATION` - Default: "India"
-- `TARGET_LANGUAGE` - Default: "en"  
-- `SERP_OVERLAP_THRESHOLD` - Default: 0.3
-- `MIN_SEARCH_VOLUME` - Default: 100
-- `MAX_COMPETITION` - Default: 0.3
-
-### Input Files
-Each script expects specific input files from previous steps:
-- `ArticleBrief.py` requires: `keyword_clusters.csv`, `cluster_summary.csv`
-- `ArticleWriter.py` requires: `article_briefs.json`, `writing_instructions.json`
-- `SocialMedia.py` requires: `article_draft.json`, `linkedin_post_writer.json`, `newsletter_instructions.json`
-- `YoutTubeScript.py` requires: `article_draft.json`, `youtube_instructions.json`
-
-## Content Guidelines
-
-The system is configured for AnoopKurup.com, a marketing consultancy targeting:
-- Professional service firms (1-20 employees) in India
-- Tech-enabled businesses and SaaS companies
-- Independent consultants with ₹20 lac+ revenue
-
-**Brand Voice**: Professional yet approachable, data-driven, practical, no-fluff, systems-focused
-
-## Running the Pipeline
-
-**Activate the virtual environment first**:
+### Database Operations
 ```bash
-source ContentEngine-env/bin/activate
+# Generate Prisma client after schema changes
+npx prisma generate
+
+# Push schema changes to database
+npx prisma db push
+
+# Reset database (removes all data)
+npx prisma db push --force-reset
+
+# Open database browser
+npx prisma studio
 ```
 
-**Execute scripts in this order**:
-```bash
-python KeywordResearcher.py
-python ArticleBrief.py  
-python ArticleWriter.py
-python SocialMedia.py
-python YoutTubeScript.py
+## Key Architecture Patterns
+
+### API Route Structure
+- All API routes follow REST conventions with proper HTTP methods
+- Database operations use Prisma with proper error handling
+- API responses use consistent JSON structure with camelCase
+- Field naming: Database uses snake_case, API/Frontend uses camelCase
+
+### Component Architecture
+- Pages are in `src/app/[page]/page.tsx` using Next.js App Router
+- All components use TypeScript with proper interface definitions
+- State management uses React hooks (useState, useEffect)
+- API calls use the centralized `api.ts` client
+
+### Database Schema Design
+- Primary entities: Company → Project → KeywordResearchSession → KeywordCluster → Keyword
+- All models use cuid() for IDs and proper cascading deletes
+- JSON fields store complex configurations (searchSettings, brandSettings, etc.)
+- DateTime fields with proper mapping (createdAt, updatedAt)
+
+### Service Layer Pattern
+- `CompanyService`, `ProjectService`, `DashboardService` in `database.ts`
+- `KeywordResearcher` class handles DataForSEO API integration
+- Services return properly typed objects, not raw Prisma models
+- Error handling with user-friendly messages
+
+## Environment Configuration
+
+Required environment variables:
+```
+DATABASE_URL="file:./dev.db"
+DATAFORSEO_LOGIN="your_email"
+DATAFORSEO_PASSWORD="your_api_password"
+NEXT_PUBLIC_APP_NAME="ContentEngine"
+NEXT_PUBLIC_API_URL="http://localhost:3000"
+TARGET_LOCATION="India"
+TARGET_LANGUAGE="en"
+SERP_OVERLAP_THRESHOLD="0.3"
+MIN_SEARCH_VOLUME="100"
+MAX_COMPETITION="0.3"
 ```
 
-## Project Structure
+## Key Integration Points
 
-The ContentEngine now uses a modern architecture with separate frontend and backend:
+### DataForSEO API Integration
+- `KeywordResearcher` class handles all DataForSEO API calls
+- Implements keyword expansion, SERP analysis, and clustering algorithms
+- Results stored in database with proper relationships
+- API credentials validated on class instantiation
 
-```
-ContentEngine/
-├── frontend/                 # Streamlit web interface
-│   ├── app.py               # Main dashboard application
-│   └── pages/               # Additional interface pages
-│       ├── project_wizard.py    # Project creation wizard
-│       ├── pipeline_runner.py   # Pipeline execution interface  
-│       ├── content_manager.py   # Content viewing/editing
-│       └── project_settings.py  # Configuration management
-├── backend/                 # Core functionality
-│   ├── core/               # Main business logic
-│   │   ├── project_manager.py   # Project lifecycle management
-│   │   └── pipeline_executor.py # Content generation pipeline
-│   ├── models/             # Data models
-│   │   └── project.py          # Project configuration model
-│   ├── utils/              # Utility functions
-│   │   ├── progress_tracker.py # Real-time progress tracking
-│   │   └── file_utils.py       # File management utilities
-│   ├── config/             # Configuration management
-│   │   └── app_config.py       # Application settings
-│   └── scripts/            # Legacy Python scripts
-├── projects/               # Generated project content
-│   └── {project_id}/       # Individual project folders
-│       ├── config.json         # Project configuration
-│       ├── keyword_research.csv   # Keyword research results
-│       ├── article_brief.md       # Content brief
-│       ├── article.md             # Generated article  
-│       ├── social_media_posts.md  # Social media content
-│       └── youtube_script.md      # YouTube script
-├── run_contentengine.py    # Startup script
-└── requirements.txt        # Python dependencies
-```
+### Frontend-Backend Communication
+- Frontend uses `src/lib/api.ts` client for all API calls
+- API routes in `src/app/api/` handle database operations
+- Consistent error handling with user-friendly messages
+- Real-time updates through React state management
 
-## Output Files
+### Database Relationships
+- Companies have many Projects (cascading delete)
+- Projects have many KeywordResearchSessions (cascading delete)
+- Research sessions have many KeywordClusters (cascading delete)
+- Clusters have many Keywords (cascading delete)
 
-Projects are now organized in individual folders under `projects/`. Each project contains:
-- `config.json` - Project settings and metadata  
-- `keyword_research.csv` - Keyword research results
-- `article_brief.md` - Content outlines and internal links
-- `article.md` - Complete blog articles
-- `social_media_posts.md` - Multi-platform social content
-- `youtube_script.md` - Video scripts and metadata
+## Content Creation Workflow
 
-## Dependencies
+1. **Company Creation**: Brand settings, search preferences, content guidelines
+2. **Project Setup**: Link to company, define broad keyword, set description
+3. **Keyword Research**: Run DataForSEO analysis, generate clusters
+4. **Results Management**: View research results, analyze keyword opportunities
 
-The scripts require these Python packages:
-- `requests` - API calls to DataForSEO
-- `pandas` - Data manipulation and CSV handling
-- `openai` - GPT model integration for content generation
-- `python-dotenv` - Environment variable management
-- `json` - Data serialization (built-in)
-- `time` - Rate limiting API calls (built-in)
-- `re` - Text processing for word counts (built-in)
-- `os` - Operating system interface (built-in)
+## Important Notes
 
-Install dependencies:
-```bash
-pip install requests pandas openai python-dotenv
-```
-
-## Security Best Practices
-
-- ✅ API credentials are stored in `.env` file (excluded from version control)
-- ✅ `.gitignore` protects sensitive files and generated content
-- ✅ Environment variables validated at runtime
-- ✅ `.env.example` provides setup template for new developers
-- ⚠️ Never commit `.env` file or hardcode credentials in source code
+- This is a **unified Next.js application** - there are no separate Python scripts or Streamlit interfaces
+- All content generation logic is integrated into TypeScript services
+- Database operations use Prisma ORM exclusively
+- The system replaced a legacy Python-based architecture completely
+- Custom CSS is used instead of Tailwind classes in components

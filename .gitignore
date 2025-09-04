@@ -73,3 +73,10 @@ Thumbs.db
 *.temp
 temp/
 tmp/
+
+# Next.js
+web/.next/
+web/node_modules/
+
+# Database
+web/prisma/dev.db

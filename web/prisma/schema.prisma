@@ -1,0 +1,118 @@
+// ContentEngine Database Schema
+// Converted from SQLAlchemy models to Prisma schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id                String   @id @default(cuid())
+  name              String
+  description       String?
+  searchSettings    Json?    @map("search_settings")
+  contentSettings   Json?    @map("content_settings")
+  brandSettings     Json?    @map("brand_settings")
+  seoSettings       Json?    @map("seo_settings")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  projects Project[]
+
+  @@map("companies")
+}
+
+model Project {
+  id           String   @id @default(cuid())
+  companyId    String   @map("company_id")
+  name         String
+  description  String?
+  broadKeyword String?  @map("broad_keyword")
+  status       String   @default("active") // active, completed, paused
+  config       Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  company          Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  researchSessions KeywordResearchSession[]
+  pipelineStages   PipelineStage[]
+
+  @@map("projects")
+}
+
+model KeywordResearchSession {
+  id               String    @id @default(cuid())
+  projectId        String    @map("project_id")
+  broadKeyword     String    @map("broad_keyword")
+  researchSettings Json?     @map("research_settings")
+  totalKeywords    Int       @default(0) @map("total_keywords")
+  totalClusters    Int       @default(0) @map("total_clusters")
+  status           String    @default("pending") // pending, running, completed, failed
+  errorMessage     String?   @map("error_message")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  completedAt      DateTime? @map("completed_at")
+
+  // Relations
+  project  Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  clusters KeywordCluster[]
+
+  @@map("keyword_research_sessions")
+}
+
+model KeywordCluster {
+  id                String   @id @default(cuid())
+  sessionId         String   @map("session_id")
+  clusterName       String   @map("cluster_name")
+  pillarKeyword     String?  @map("pillar_keyword")
+  keywordsCount     Int      @default(0) @map("keywords_count")
+  totalSearchVolume Int      @default(0) @map("total_search_volume")
+  avgSearchVolume   Float    @default(0.0) @map("avg_search_volume")
+  avgCompetition    Float    @default(0.0) @map("avg_competition")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  // Relations
+  session  KeywordResearchSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  keywords Keyword[]
+
+  @@map("keyword_clusters")
+}
+
+model Keyword {
+  id           String   @id @default(cuid())
+  clusterId    String   @map("cluster_id")
+  keyword      String
+  searchVolume Int      @default(0) @map("search_volume")
+  competition  Float    @default(0.0)
+  role         String? // 'Pillar Post' or 'Cluster Post'
+  serpUrls     Json?    @map("serp_urls")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // Relations
+  cluster KeywordCluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+
+  @@map("keywords")
+}
+
+model PipelineStage {
+  id           String    @id @default(cuid())
+  projectId    String    @map("project_id")
+  stageName    String    @map("stage_name") // keyword_research, content_briefs, etc.
+  status       String    @default("pending") // pending, running, completed, failed
+  startedAt    DateTime? @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  errorMessage String?   @map("error_message")
+  outputData   Json?     @map("output_data")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("pipeline_stages")
+}

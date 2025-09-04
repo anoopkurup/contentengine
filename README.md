@@ -1,88 +1,99 @@
 # ContentEngine
 
-**AI-Powered Content Creation Platform with Interactive Pipeline Management**
+**Modern AI-Powered Content Creation Platform**
 
-ContentEngine is a comprehensive Python-based platform that automates the entire content creation workflow—from keyword research to multi-platform content distribution. Built with a modern web interface for seamless project management and real-time pipeline execution.
+ContentEngine is a unified Next.js application that automates the entire content creation workflow—from keyword research to multi-platform content distribution. Built with TypeScript, Prisma, and integrated AI services for professional content marketing.
 
-[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.49.1-red.svg)](https://streamlit.io/)
+[![Next.js 15](https://img.shields.io/badge/Next.js-15.5.2-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-Latest-2D3748)](https://www.prisma.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🚀 Quick Start
 
-### One-Command Launch
-```bash
-./start.sh
-```
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- DataForSEO API credentials (for keyword research)
 
-This automatically:
-- Activates the virtual environment
-- Launches the Streamlit web interface
-- Opens ContentEngine in your browser at http://localhost:8501
+### Installation
 
-### Manual Setup
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env with your API credentials
-streamlit run frontend/app.py
-```
+1. **Clone and Setup**
+   ```bash
+   cd ContentEngine/web
+   npm install
+   ```
+
+2. **Configure Environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your API credentials
+   ```
+
+3. **Setup Database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+4. **Launch Application**
+   ```bash
+   npm run dev
+   ```
+
+Visit http://localhost:3000 to access ContentEngine.
 
 ## 🏗️ Architecture
 
-ContentEngine features a modern **frontend/backend architecture** with interactive web interface:
+ContentEngine is built as a **unified Next.js application** with integrated backend services:
 
 ```
-🎯 Project Creation → 🔍 Keyword Research → 📝 Content Briefs → ✍️ Article Writing → 📱 Social Media → 🎬 YouTube Scripts
+🏢 Company Setup → 📋 Project Creation → 🔍 Keyword Research → 📝 Content Generation → 📊 Results Management
 ```
 
-### 🖥️ Web Interface Components
+### 🖥️ Application Stack
 
-- **📊 Dashboard**: Project overview and quick actions
-- **🧙 Project Wizard**: Step-by-step project creation with configuration
-- **🚀 Pipeline Runner**: Execute stages with real-time progress tracking
-- **📁 Content Manager**: View, edit, and manage generated content
-- **⚙️ Project Settings**: Configure target markets and generation preferences
+- **Frontend**: Next.js 15 with App Router
+- **Backend**: Next.js API Routes 
+- **Database**: SQLite with Prisma ORM
+- **Language**: TypeScript throughout
+- **Styling**: Custom CSS with responsive design
+- **AI Integration**: DataForSEO API + TypeScript keyword research service
 
-### 🤖 Content Generation Options
+### 🎯 Core Features
 
-**Claude Integration** (Recommended)
-- Superior content quality with strategic thinking
-- Interactive keyword selection and content refinement
-- Enhanced competitive analysis and content gap identification
-
-**OpenAI Implementation** (Legacy)
-- Automated high-volume content generation
-- Fully scripted pipeline execution
-- Predictable API costs and processing time
+- **🏢 Company Management**: Multi-company support with brand settings
+- **📋 Project Organization**: Structured project workflow management  
+- **🔍 Advanced Keyword Research**: SERP-based clustering and analysis
+- **📊 Real-time Dashboard**: Live project status and statistics
+- **🎨 Modern UI**: Clean, responsive interface with intuitive navigation
 
 ## ✨ Key Features
 
-### 🎯 Interactive Project Management
-- **Visual Pipeline Runner**: Execute individual stages or complete workflows
-- **Real-time Progress Tracking**: Live updates during script execution
-- **Project Organization**: Structured file management with stage-based directories
-- **Content Preview**: View and edit generated content directly in the interface
+### 🏢 Company Management
+- **Brand Voice Configuration**: Define writing style, target audience, content guidelines
+- **Search Settings**: Configure location targeting, language, competition thresholds
+- **Multi-company Support**: Manage content for multiple clients or brands
+- **Settings Management**: Easy editing of company configurations
 
-### 🔍 Advanced Keyword Research
-- **SERP-based Clustering**: DataForSEO-powered keyword analysis with overlap detection
-- **Interactive Selection**: Choose specific keywords from research results for content creation
-- **Competition Analysis**: Filter by search volume, competition, and market opportunity
-- **Export Capabilities**: Download research results in multiple formats
+### 📋 Project Management  
+- **Structured Projects**: Link projects to companies with specific keywords
+- **Broad Keyword Focus**: Each project targets a main keyword theme
+- **Status Tracking**: Monitor project progress and completion
+- **Research Integration**: Seamless connection to keyword research workflows
 
-### 📝 Multi-Stage Content Pipeline
-- **Content Briefs**: AI-powered outlines with competitive research
-- **Article Writing**: SEO-optimized long-form content (1,500-2,500 words)
-- **Social Media**: Platform-specific content for LinkedIn, Twitter, Instagram
-- **YouTube Scripts**: Professional video content with visual direction
+### 🔍 Keyword Research Engine
+- **DataForSEO Integration**: Professional keyword research with real search data
+- **SERP Analysis**: Analyze competitor content and identify gaps
+- **Keyword Clustering**: Automatic grouping based on search intent
+- **Competition Analysis**: Filter by search volume and competition metrics
+- **Results Export**: Download research data for external analysis
 
-### 🔧 Technical Excellence
-- **Environment Management**: Secure API credential handling
-- **Error Handling**: Comprehensive validation and user-friendly error messages
-- **File Organization**: Automatic organization of outputs by pipeline stage
-- **State Management**: Persistent project configuration and execution status
+### 📊 Unified Dashboard
+- **Project Overview**: See all projects and their current status
+- **Quick Actions**: Fast access to common tasks and workflows
+- **Real-time Stats**: Live updates on companies, projects, and research sessions
+- **Intuitive Navigation**: Clean interface designed for productivity
 
 ## ⚙️ Configuration
 
@@ -90,205 +101,222 @@ ContentEngine features a modern **frontend/backend architecture** with interacti
 
 Add to your `.env` file:
 
-```bash
-# DataForSEO API (Required for keyword research)
-DATAFORSEO_LOGIN=your_dataforseo_login
-DATAFORSEO_PASSWORD=your_dataforseo_password
+```env
+# Database
+DATABASE_URL="file:./dev.db"
 
-# OpenAI API (Required for OpenAI implementation)
-OPENAI_API_KEY=your_openai_api_key
+# DataForSEO API Credentials (Required)
+DATAFORSEO_LOGIN="your_email@example.com"
+DATAFORSEO_PASSWORD="your_api_password"
+
+# Application Settings
+NEXT_PUBLIC_APP_NAME="ContentEngine"
+NEXT_PUBLIC_API_URL="http://localhost:3000"
+
+# Content Configuration
+TARGET_LOCATION="India"
+TARGET_LANGUAGE="en"
+SERP_OVERLAP_THRESHOLD="0.3"
+MIN_SEARCH_VOLUME="100"
+MAX_COMPETITION="0.3"
 ```
 
-### Project Configuration Options
+### Database Configuration
 
-Configure through the web interface or environment variables:
+ContentEngine uses SQLite with Prisma ORM. The database schema includes:
 
-```bash
-TARGET_LOCATION=India                # Geographic targeting
-TARGET_LANGUAGE=en                   # Content language
-SERP_OVERLAP_THRESHOLD=0.3          # Keyword clustering sensitivity
-MIN_SEARCH_VOLUME=100               # Minimum search volume filter
-MAX_COMPETITION=0.3                 # Maximum competition filter
-CONTENT_GENERATOR=claude            # claude or openai
-CLAUDE_MODEL_PREFERENCE=quality     # quality or speed
-```
+- **Companies**: Brand settings, search preferences, content guidelines
+- **Projects**: Linked to companies with broad keywords and descriptions  
+- **Research Sessions**: Keyword research data and results
+- **Keywords**: Individual keyword data with search volume and competition
+- **Clusters**: Grouped keywords based on search intent
 
 ## 🎯 Getting Started
 
-### 1. Launch the Platform
-```bash
-./start.sh
-```
+### 1. Create Your First Company
 
-### 2. Create Your First Project
-1. Click **"Create New Project"** on the dashboard
-2. Follow the 4-step wizard:
-   - **Project Setup**: Name, description, target audience
-   - **Keywords**: Add seed keywords for research
-   - **Configuration**: Set location, language, thresholds
-   - **Content Settings**: Choose generation method (Claude/OpenAI)
+1. Navigate to **Companies** from the dashboard
+2. Click **"+ New Company"** 
+3. Configure in 3 tabs:
+   - **Basic Info**: Company name, description, location
+   - **Search Settings**: Language, search volume, competition thresholds
+   - **Brand & Content**: Brand voice, writing style, target audience, content guidelines
 
-### 3. Execute the Pipeline
-1. Navigate to **"Pipeline Runner"**
-2. Select your project from the sidebar
-3. Run individual stages or the complete pipeline:
-   - **🔍 Keyword Research**: Generate keyword clusters and SERP analysis
-   - **📄 Content Brief**: Create detailed content outlines
-   - **📝 Article Writing**: Generate SEO-optimized articles
-   - **📱 Social Media**: Create platform-specific posts
-   - **🎥 YouTube Script**: Generate video scripts and metadata
+### 2. Create a Project
+
+1. Go to **Projects** from the main menu
+2. Click **"+ New Project"**
+3. Fill in project details:
+   - Link to a company
+   - Add broad keyword (e.g., "digital marketing")
+   - Provide project description
+
+### 3. Run Keyword Research
+
+1. Navigate to **Research** from the dashboard
+2. Select your project from the dropdown
+3. Review and customize research settings
+4. Click **"🔍 Start Keyword Research"**
+5. View results with keyword clusters and search volumes
 
 ### 4. Manage Your Content
-1. Visit **"Content Manager"**
-2. Review generated content files
-3. Select keywords from research results
-4. Edit content directly in the interface
-5. Download files or export entire projects
+
+- **Dashboard**: Overview of all projects and their status
+- **Projects**: Detailed view of individual projects and research sessions
+- **Companies**: Manage brand settings and configurations
+- **Research**: Run and view keyword research results
 
 ## 📁 Project Structure
 
 ```
 ContentEngine/
-├── 🖥️ Frontend/                    # Streamlit web interface
-│   ├── app.py                      # Main dashboard
-│   └── pages/
-│       ├── project_wizard.py       # Project creation wizard
-│       ├── pipeline_runner.py      # Pipeline execution interface
-│       ├── content_manager.py      # Content management interface
-│       └── project_settings.py     # Configuration management
-│
-├── 🔧 Backend/                     # Core application logic
-│   ├── core/
-│   │   ├── project_manager.py      # Project lifecycle management
-│   │   ├── pipeline_executor.py    # Script execution coordinator
-│   │   └── script_executor.py      # Real script execution wrapper
-│   ├── models/
-│   │   └── project.py             # Project data model
-│   └── utils/
-│       ├── file_utils.py          # File management utilities
-│       └── progress_tracker.py    # Real-time progress tracking
-│
-├── 📝 Scripts/                     # Content generation scripts
-│   ├── KeywordResearcher.py       # DataForSEO keyword clustering
-│   ├── ArticleBrief_Claude.py     # Enhanced content briefs
-│   ├── ArticleWriter_Claude.py    # Strategic article creation
-│   ├── SocialMedia_Claude.py      # Multi-platform content
-│   ├── YouTubeScript_Claude.py    # Professional video scripts
-│   └── [OpenAI variants...]       # Legacy OpenAI implementations
-│
-├── 📊 Projects/                    # Project workspace
-│   └── project-{id}-{name}/
-│       ├── config.json            # Project configuration
-│       ├── inputs/                # Seed keywords and settings
-│       ├── stage_01_keyword_research/  # Research results
-│       ├── stage_02_content_briefs/    # Content outlines
-│       ├── stage_03_articles/          # Generated articles
-│       ├── stage_04_social_media/      # Social content
-│       └── stage_05_youtube/           # Video scripts
-│
-└── 🔧 Configuration/
-    ├── .env.example               # Environment template
-    ├── requirements.txt           # Python dependencies
-    ├── start.sh                  # Launch script
-    └── run_contentengine.py      # CLI runner
+├── web/                           # Next.js application
+│   ├── src/
+│   │   ├── app/                   # Next.js App Router
+│   │   │   ├── page.tsx           # Dashboard
+│   │   │   ├── companies/         # Company management
+│   │   │   ├── projects/          # Project management  
+│   │   │   ├── research/          # Keyword research
+│   │   │   └── api/               # API routes
+│   │   │       ├── companies/     # Company CRUD operations
+│   │   │       ├── projects/      # Project CRUD operations
+│   │   │       ├── dashboard/     # Dashboard data
+│   │   │       └── keyword-research/ # Research API
+│   │   ├── lib/
+│   │   │   ├── api.ts             # Frontend API client
+│   │   │   ├── types.ts           # TypeScript interfaces
+│   │   │   └── services/          # Backend services
+│   │   │       ├── database.ts    # Database operations
+│   │   │       └── keywordResearcher.ts # Research engine
+│   │   └── styles/                # CSS styling
+│   ├── prisma/
+│   │   └── schema.prisma          # Database schema
+│   ├── package.json               # Dependencies
+│   └── .env                       # Configuration
+├── Writing Instructions.md        # Brand voice guidelines
+└── README.md                      # This file
 ```
 
-## 🔄 Pipeline Execution
+## 🔧 Development
 
-### Web Interface (Recommended)
-1. **Interactive Execution**: Run stages through the web interface
-2. **Real-time Monitoring**: Watch progress with live updates
-3. **Error Handling**: User-friendly error messages and recovery options
-4. **Content Review**: Immediate access to generated content
+### Database Management
 
-### Command Line Interface
 ```bash
-# Activate environment
-source venv/bin/activate
+# Generate Prisma client
+npx prisma generate
 
-# Run individual scripts
-python scripts/KeywordResearcher.py
-python scripts/ArticleBrief_Claude.py
-python scripts/ArticleWriter_Claude.py
+# Apply schema changes
+npx prisma db push
 
-# Or use the CLI runner
-python run_contentengine.py --project "My Project" --stage keyword_research
+# View database in browser
+npx prisma studio
+
+# Reset database (removes all data)
+npx prisma db push --force-reset
 ```
+
+### API Development
+
+The application uses Next.js API routes for all backend operations:
+
+- **GET/POST /api/companies** - Company management
+- **GET/POST /api/projects** - Project operations  
+- **POST /api/keyword-research** - Start keyword research
+- **GET /api/keyword-research/[id]** - Get research results
+- **GET /api/dashboard** - Dashboard statistics
+
+### Adding Features
+
+1. **Database Changes**: Update `prisma/schema.prisma` and run `npx prisma db push`
+2. **API Endpoints**: Add new routes in `src/app/api/`
+3. **Frontend Pages**: Create new pages in `src/app/`
+4. **Types**: Update `src/lib/types.ts` for TypeScript support
+5. **Services**: Add business logic in `src/lib/services/`
 
 ## 🛠️ Advanced Features
 
 ### 🔍 Keyword Research Intelligence
-- **SERP Overlap Analysis**: Group keywords by search result similarity
-- **Cluster Identification**: Automatic pillar/cluster post categorization
-- **Competition Scoring**: DataForSEO-powered competition analysis
-- **Volume Filtering**: Customizable search volume and competition thresholds
 
-### 📊 Content Analytics
-- **Progress Tracking**: Visual pipeline progress indicators
-- **File Organization**: Automatic stage-based file management
-- **Export Options**: Multiple format downloads (CSV, MD, JSON)
-- **Content Metrics**: Word counts, reading time estimates
+- **DataForSEO Integration**: Professional-grade keyword data
+- **SERP Analysis**: Competitor content analysis and gap identification
+- **Cluster Detection**: Automatic grouping based on search result overlap
+- **Competition Scoring**: Detailed competition analysis with volume filtering
+- **Export Capabilities**: Download results in multiple formats
+
+### 📊 Data Management
+
+- **Real-time Updates**: Live dashboard updates and progress tracking
+- **File Organization**: Structured data storage with relational database
+- **Export Options**: Download project data and research results
+- **Data Persistence**: All data stored in SQLite database
 
 ### ⚙️ Configuration Management
-- **Project Templates**: Reusable configuration presets
-- **Environment Variables**: Secure credential management
-- **API Integration**: Seamless DataForSEO and OpenAI connectivity
-- **Error Validation**: Comprehensive input validation and error handling
+
+- **Company Templates**: Reusable brand and search configurations
+- **Environment Variables**: Secure credential and settings management
+- **API Integration**: Seamless DataForSEO connectivity with error handling
+- **Input Validation**: Comprehensive validation throughout the application
 
 ## 🔒 Security & Best Practices
 
 - ✅ **Environment Variables**: All credentials stored securely in `.env`
-- ✅ **Git Security**: Sensitive files excluded from version control
-- ✅ **Input Validation**: Comprehensive validation throughout the pipeline
+- ✅ **Git Security**: Database and sensitive files excluded from version control
+- ✅ **Input Validation**: Server-side validation on all API endpoints
 - ✅ **Error Handling**: User-friendly error messages without exposing internals
-- ✅ **File Permissions**: Proper file access controls and organization
+- ✅ **Type Safety**: Full TypeScript coverage for compile-time safety
 
 ## 🎯 Target Use Cases
 
 ### Marketing Agencies
-- **Client Projects**: Manage multiple client content pipelines
-- **Scalable Workflows**: Handle high-volume content generation
-- **Brand Consistency**: Maintain brand voice across all content
+- **Client Management**: Handle multiple client accounts with separate branding
+- **Scalable Research**: Efficient keyword research for multiple campaigns
+- **Brand Consistency**: Maintain distinct brand voices across client projects
 
-### Content Teams
-- **Editorial Planning**: Research-driven content calendar creation
-- **SEO Optimization**: Data-driven keyword targeting and optimization
-- **Multi-Platform Publishing**: Consistent content across all channels
+### Content Teams  
+- **Research-Driven Planning**: Data-driven keyword research for content calendars
+- **SEO Optimization**: Professional keyword analysis and competition research
+- **Workflow Management**: Structured project management with clear status tracking
 
 ### Solo Consultants
-- **Thought Leadership**: Create authoritative content in your niche
-- **Lead Generation**: SEO-optimized content for organic discovery
-- **Time Efficiency**: Automate content creation while maintaining quality
+- **Professional Tools**: Enterprise-grade keyword research capabilities
+- **Time Efficiency**: Streamlined workflow from research to content planning
+- **Client Reports**: Professional research outputs for client deliverables
 
-## 📚 Documentation
+## 📊 System Requirements
 
-- **[Development Guidelines](CLAUDE.md)**: Technical documentation for contributors
-- **[Environment Setup](.env.example)**: Configuration template and options
-- **[API Integration](scripts/)**: Script documentation and customization guides
+### Minimum Requirements
+- **Node.js**: 18.0 or higher
+- **RAM**: 4GB minimum, 8GB recommended
+- **Storage**: 1GB free space for database and cache
+- **Network**: Stable internet connection for API calls
+
+### API Requirements
+- **DataForSEO Account**: Required for keyword research functionality
+- **API Quota**: Varies based on research volume and frequency
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Test your changes with the web interface
-4. Commit: `git commit -m 'Add feature-name'`
-5. Push: `git push origin feature-name`
-6. Submit a Pull Request
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Make your changes and test thoroughly
+4. Run type checking: `npm run build`
+5. Commit: `git commit -m 'Add new feature'`
+6. Push: `git push origin feature/new-feature`  
+7. Submit a Pull Request
 
 ## 🔗 Links
 
-- **Repository**: https://github.com/anoopkurup/contentengine
-- **Issues**: https://github.com/anoopkurup/contentengine/issues
-- **Claude Code**: https://claude.ai/code
 - **DataForSEO API**: https://dataforseo.com/
-- **Streamlit Documentation**: https://docs.streamlit.io/
+- **Next.js Documentation**: https://nextjs.org/docs
+- **Prisma Documentation**: https://www.prisma.io/docs
+- **TypeScript Handbook**: https://www.typescriptlang.org/docs
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
-**Built with ❤️ for modern content creators**
+**Built for modern content creators who demand professional tools and efficient workflows.**
 
-*ContentEngine combines the power of AI-driven content generation with intuitive project management, making professional content creation accessible to everyone.*
+*ContentEngine combines enterprise-grade keyword research with intuitive project management, making professional content strategy accessible to teams of all sizes.*
